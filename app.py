@@ -102,6 +102,7 @@ dash_app.layout = html.Div(
                                     href='https://data.cityofnewyork.us/'
                                     ),
                                 ".",
+                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pretium lectus quam id leo. Tristique sollicitudin nibh sit amet commodo. At ultrices mi tempus imperdiet nulla malesuada pellentesque. Urna et pharetra pharetra massa massa. Vulputate ut pharetra sit amet aliquam id.",
                             ],
                          ),
                          html.Hr(className="divider"),
@@ -212,8 +213,7 @@ def update_map(year_dropdown_name):
     	)
 
     fig.update_layout(mapbox_style="carto-positron",
-    	width=800,
-    	height=800,
+    	height=600,
         margin={"r": 30, "t": 57, "l": 30, "b": 23},
     	)
 
@@ -229,33 +229,32 @@ def update_map(year_dropdown_name):
     ],
 )
 def update_textbox(click_data):
+    if click_data == None:
+        children = [
+            build_graph_title("School Information"),
+            html.P('Click on a point on the map to display school information'),
+        ]
+    else:
+        name = click_data['points'][0]['hovertext']
+        dbn = click_data['points'][0]['customdata'][3]
+        district = click_data['points'][0]['customdata'][0]
+        address = click_data['points'][0]['customdata'][1]
+        telephone = click_data['points'][0]['customdata'][2]
+        if (click_data['points'][0]['customdata'][4] > 0):
+            offers = click_data['points'][0]['customdata'][4]
+        else:
+            offers = '0 to 5'
+        children = [
+          build_graph_title("School Information"),
+          html.P('School Name: {}'.format(name)),
+          html.P('DBN: {}'.format(dbn)),
+          html.P('District: {}'.format(district)),
+          html.P('Address: {}'.format(address)),
+          html.P('Telephone: {}'.format(telephone)),
+          html.P('Offers: {}'.format(offers)),
+          ]
 
-	if click_data == None:
-		name = 'P.S. 184m Shuang Wen'
-		dbn = '01M184'
-		district = 1
-		address = '327 Cherry Street, New York, NY 10002'
-		telephone = '212-602-9700'
-		offers = 19
-	else:
-		name = click_data['points'][0]['hovertext']
-		dbn = click_data['points'][0]['customdata'][3]
-		district = click_data['points'][0]['customdata'][0]
-		address = click_data['points'][0]['customdata'][1]
-		telephone = click_data['points'][0]['customdata'][2]
-		offers = click_data['points'][0]['customdata'][4]
-
-	children = [
-	  build_graph_title("School Information"),
-	  html.P('School Name: {}'.format(name)),
-	  html.P('DBN: {}'.format(dbn)),
-	  html.P('District: {}'.format(district)),
-	  html.P('Address: {}'.format(address)),
-	  html.P('Telephone: {}'.format(telephone)),
-	  html.P('Offers: {}'.format(offers)),
-	  ]
-
-	return children
+    return children
 
 
 # Running the server

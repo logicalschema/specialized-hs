@@ -2,11 +2,6 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700');
 
 
-.responsive {
-  width: 100%;
-  max-width: 200px;
-  height: auto;
-}
 
 hr.divider {
     height: 5px;
@@ -17,21 +12,18 @@ hr.divider {
     font-size: 1rem;
 }
 
-.row {
-  display: table;
-}
+
 
 .column {
   flex: 50%;
-  margin-left: 50px;
+  margin-left: 10px;
 }
 
 .banner Img {
-    height: 64px;
+    height: auto;
+    max-width: 40%;
     margin-bottom: 5px;
     margin-left: 5px;
-    class: "responsive";
-
 }
 
 
@@ -59,11 +51,10 @@ h4 { font-size: 2.6rem; line-height: 1.35; letter-spacing: -.08rem; margin-botto
 h5 { font-size: 2.2rem; line-height: 1.5;  letter-spacing: -.05rem; margin-bottom: 0.6rem; margin-top: 0.6rem;}
 h6 { font-size: 2.0rem; line-height: 1.6;  letter-spacing: 0; margin-bottom: 0.75rem; margin-top: 0.75rem;}
 
-
 .banner h6 {
     font-family: 'Open Sans', sans-serif;
     font-size: 2.0rem;
-    font-weight: 300;
+    font-weight: 200;
     text-transform: uppercase;
     line-height: normal;
     color: black;

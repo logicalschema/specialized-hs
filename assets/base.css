@@ -1,6 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,800');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700');
 
+
+.responsive {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+}
+
 hr.divider {
     height: 5px;
     background-color: #636466;
@@ -11,7 +18,7 @@ hr.divider {
 }
 
 .row {
-  display: flex;
+  display: table;
 }
 
 .column {
@@ -23,6 +30,7 @@ hr.divider {
     height: 64px;
     margin-bottom: 5px;
     margin-left: 5px;
+    class: "responsive";
 
 }
 

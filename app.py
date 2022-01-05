@@ -28,7 +28,6 @@ dash_app = dash.Dash(
 
 )
 
-
 app = dash_app.server
 dash_app.config["suppress_callback_exceptions"] = True
 dash_app.title = 'NYC Specialized High School Offers By Middle School: 2015-2021'
@@ -69,7 +68,7 @@ def build_banner():
       id="banner",
       className="banner",
       children=[
-        html.Img(src=dash_app.get_asset_url("cunysps_2021_2linelogo_spsblue_1.png"), style={'height':'75%', 'width':'75%'}),
+        html.Img(src=dash_app.get_asset_url("cunysps_2021_2linelogo_spsblue_1.png"), ),
         html.H6("NYC Specialized High School Offers By Middle School: 2016-2021"),
         ],
     )
@@ -215,6 +214,7 @@ def update_map(year_dropdown_name):
     fig.update_layout(mapbox_style="carto-positron",
     	width=800,
     	height=800,
+        margin={"r": 30, "t": 57, "l": 30, "b": 23},
     	)
 
     return fig

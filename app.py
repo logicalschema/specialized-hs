@@ -138,6 +138,34 @@ dash_app.layout = html.Div(
                   ),
                ]
             ),
+                html.Div(
+      id="bottom-row",
+      children=[
+          html.Div(
+              className="bottom-row",
+              id="bottom-row-header",
+              children=[
+                  html.Div(
+                     className="column",
+                     id="form-bar-container",
+                     children=[
+                         build_graph_title("School Information"),
+                         # dcc.Graph(id='form-bar-graph'),
+                     ]
+                  ),
+                  html.Div(
+                     className="column",
+                     id="form-text-container",
+                     children=[
+                         html.P(
+                            id="lower-text-box"),
+                     ],
+                  ),
+              ]
+              )
+      ]
+      ),
+    
           ]
     ),
 ])
@@ -193,7 +221,41 @@ def update_map(year_dropdown_name):
 
 
 
+# Update bar plot
+@dash_app.callback(
+    Output("lower-text-box", "children"),
+    [
+        Input("map-graph", "clickData")
+    ],
+)
+def update_textbox(click_data):
 
+	if click_data == None:
+		name = 'P.S. 184m Shuang Wen'
+		dbn = '01M184'
+		district = 1
+		address = '327 Cherry Street, New York, NY 10002'
+		telephone = '212-602-9700'
+		offers = 19
+	else:
+		name = click_data['points'][0]['hovertext']
+		dbn = click_data['points'][0]['customdata'][3]
+		district = click_data['points'][0]['customdata'][0]
+		address = click_data['points'][0]['customdata'][1]
+		telephone = click_data['points'][0]['customdata'][2]
+		offers = click_data['points'][0]['customdata'][4]
+
+	children = [
+	  build_graph_title("School Information"),
+	  html.P('School Name: {}'.format(name)),
+	  html.P('DBN: {}'.format(dbn)),
+	  html.P('District: {}'.format(district)),
+	  html.P('Address: {}'.format(address)),
+	  html.P('Telephone: {}'.format(telephone)),
+	  html.P('Offers: {}'.format(offers)),
+	  ]
+
+	return children
 
 
 # Running the server

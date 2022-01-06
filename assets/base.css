@@ -8,20 +8,21 @@ hr.divider {
     background-color: #636466;
     border: none;
 }
+
 .graph-title {
     font-size: 1rem;
 }
 
 
-
 .column {
   flex: 50%;
   margin-left: 10px;
+
 }
 
 .banner Img {
-    height: auto;
     max-width: 40%;
+    height: auto;
     margin-bottom: 5px;
     margin-left: 5px;
 }
@@ -31,6 +32,11 @@ hr.divider {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
+}
+
+
+.grid-child-element { 
+    margin: 10px; 
 }
 
 body {
@@ -60,21 +66,59 @@ h6 { font-size: 2.0rem; line-height: 1.6;  letter-spacing: 0; margin-bottom: 0.7
     color: black;
 }
 
+
 #bottom-row {
-    padding: 2rem;
+    padding: 1rem;
     background-color: #1D3A83;
+    display: flex;
 }
 
 .bottom-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 50px;
 }
 
 .bottom-row p {
     color: white;
 }
 
+.bottom-left-column {
+}
+
+.bottom-right-column {
+}
+
+
 #bottom-row .graph-title {
     font-family: "Open Sans", sans-serif;
-    font-weight: 800;
-    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+@media screen and (max-width: 768px) {
+  .services-container {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
+   }
+
+  .cell-1, .cell-2, .cell-3, .cell-4, .cell-5, .cell-6 {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .bottom-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+   }
+
+   .bottom-left-column {
+     width: auto;
+   }
+
+   .bottom-right-column {
+      width: auto;
+  }
+
+
 }

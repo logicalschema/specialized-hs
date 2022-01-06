@@ -1,12 +1,12 @@
 import json
 import dash
-# import dash_core_components as dcc
+import math
 from dash import dcc
-# import dash_html_components as html
 from dash import html
 from dash.dependencies import Input, Output, State
 import pandas as pd
 import plotly.express as px
+
 
 
 # external JavaScript files
@@ -36,7 +36,7 @@ dash_app._favicon = ('assets/favicon.ico')
 
 # Load data
 df = pd.read_csv("assets/complete.csv",
-                   dtype={'district': int,'schooldbn': str,	'name': str,
+                   dtype={'district': int,'dbn': str,	'name': str,
                    'telephone': str, 'address': str, 'Postcode': str,
                    'Borough': str, 'url': str, 'Latitude': float, 'Longitude': float,
                    })
@@ -61,6 +61,8 @@ year_lookup = {
 	'2019-2020': 2020, 
 	'2020-2021': 2021,
 }
+year_values = list(year_lookup.values())
+
 
 # Functions
 def build_banner():
@@ -115,6 +117,7 @@ dash_app.layout = html.Div(
                            value=years[5],
                            clearable=False
                            ),
+                         html.Br(),
 
                    ]
                   ),
@@ -128,7 +131,6 @@ dash_app.layout = html.Div(
                               id="map",
                               className="row",
                               children=[
-                              # dcc Graph here
                                  dcc.Graph(id='map-graph')
                               ]
 
@@ -146,19 +148,21 @@ dash_app.layout = html.Div(
               id="bottom-row-header",
               children=[
                   html.Div(
-                     className="column",
+                     className="bottom-left-column",
                      id="form-bar-container",
                      children=[
-                         build_graph_title("School Information"),
-                         # dcc.Graph(id='form-bar-graph'),
+                         build_graph_title("2016-2021 Information"),
+                         dcc.Graph(id='form-bar-graph'),
+                         html.Br(),
                      ]
                   ),
                   html.Div(
-                     className="column",
+                     className="bottom-right-column",
                      id="form-text-container",
                      children=[
                          html.P(
-                            id="lower-text-box"),
+                            id="lower-text-box"
+                            ),
                      ],
                   ),
               ]
@@ -209,19 +213,22 @@ def update_map(year_dropdown_name):
     	center = center, 
     	zoom=10,
     	hover_name='name',
-    	hover_data=['district', 'address', 'telephone', 'dbn', offers_count],
+    	hover_data=['district', 'address', 'telephone', 'dbn', offers_count, 'url'],
     	)
 
     fig.update_layout(mapbox_style="carto-positron",
     	height=600,
         margin={"r": 30, "t": 57, "l": 30, "b": 23},
+        hoverlabel_font_size=11,
+        legend_font_size=10,
     	)
+
 
     return fig
 
 
 
-# Update bar plot
+# Update Text Box
 @dash_app.callback(
     Output("lower-text-box", "children"),
     [
@@ -240,13 +247,22 @@ def update_textbox(click_data):
         district = click_data['points'][0]['customdata'][0]
         address = click_data['points'][0]['customdata'][1]
         telephone = click_data['points'][0]['customdata'][2]
+        url = click_data['points'][0]['customdata'][5]
         if (click_data['points'][0]['customdata'][4] > 0):
             offers = click_data['points'][0]['customdata'][4]
         else:
             offers = '0 to 5'
         children = [
           build_graph_title("School Information"),
-          html.P('School Name: {}'.format(name)),
+          html.P(
+            children = [
+                'School Name: ', 
+                html.A('{}'.format(name), href=url),
+            ]
+
+
+
+            ),
           html.P('DBN: {}'.format(dbn)),
           html.P('District: {}'.format(district)),
           html.P('Address: {}'.format(address)),
@@ -255,6 +271,78 @@ def update_textbox(click_data):
           ]
 
     return children
+
+
+
+
+# Update Bar plot
+@dash_app.callback(
+    Output("form-bar-graph", "figure"),
+    [
+        Input("map-graph", "clickData")
+    ],
+)
+def update_bar(click_data):
+    if click_data == None:
+        dbn = '01M184'
+        name = 'P.S. 184m Shuang Wen'
+    else:
+        dbn = click_data['points'][0]['customdata'][3]
+        name = click_data['points'][0]['hovertext']
+
+    testers_count_select = []
+    offers_count_select = []
+
+    for i in year_lookup.values():
+        testers_count_select.append(str(i) + '_testers_count')
+        offers_count_select.append(str(i) + '_offers_count')
+
+    mask = df["dbn"] == dbn
+    select = df[mask]
+    testers = select[testers_count_select].values.tolist()
+    offers = select[offers_count_select].values.tolist()
+
+    temp = [item for sublist in testers for item in sublist]
+    testers = temp
+
+    temp = [item for sublist in offers for item in sublist]
+    offers = temp
+
+    testers = [2 if x==0 else x for x in testers]
+    testers = [0 if math.isnan(x) else x for x in testers]
+
+    offers = [2 if x==0 else x for x in offers]
+    offers = [0 if math.isnan(x) else x for x in offers]
+
+    temp_df = pd.DataFrame(list(zip(year_values, testers, offers)),
+              columns =['Year', 'Total Testers', 'Number of Offers'])
+
+    temp_df = pd.melt(temp_df, id_vars =['Year'], value_vars =['Total Testers', 'Number of Offers'])
+
+
+
+    fig = px.bar(
+        temp_df,
+        x="Year",
+        y="value",
+        color="variable",
+        barmode="overlay",
+        opacity=1,
+        labels={
+        'value': 'Count',
+        'variable': 'Legend',
+        },
+        title='Historical Information for ' + name,
+    )
+
+    fig.update_layout(
+        font_size=9,
+    )
+
+
+    return fig
+
+
 
 
 # Running the server

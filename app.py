@@ -11,7 +11,7 @@ import plotly.express as px
 # external JavaScript files
 external_scripts = [
     {
-        'src': 'https://www.googletagmanager.com/gtag/js?id=G-ET46TBPVET',
+        'src': 'https://www.googletagmanager.com/gtag/js?id=G-9JRRFW8N1M',
     }
 ]
 

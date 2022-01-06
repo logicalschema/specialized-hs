@@ -1,4 +1,3 @@
-import json
 import dash
 import math
 from dash import dcc

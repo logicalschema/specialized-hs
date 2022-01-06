@@ -100,13 +100,21 @@ dash_app.layout = html.Div(
                             children=[
                                 "This Dash app utilizes data from ",
                                 html.A(
-                                    "NYC OpenData",
-                                    href='https://data.cityofnewyork.us/'
+                                    "NYC OpenData SHSAT Admissions Test Offers by Sending School",
+                                    href='https://data.cityofnewyork.us/browse?q=shsat'
                                     ),
-                                ".",
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pretium lectus quam id leo. Tristique sollicitudin nibh sit amet commodo. At ultrices mi tempus imperdiet nulla malesuada pellentesque. Urna et pharetra pharetra massa massa. Vulputate ut pharetra sit amet aliquam id.",
+                                " for 2015-2021. The data stored counts for the total of students in H.S admissions, students who took the SHSAT, and offers made to ",
+                                "attend a specialized high school. Schools recorded 0-5 together as a group statistic. So if a middle school had 0 SHSAT offers, it would be recorded as 0-5.",
                             ],
                          ),
+                         html.P(
+                            children=[
+                              "Explore the data. The map will enable you to see the data for the schools and what was recorded.",
+                              "Select the year from the dropdown menu to see the statistics for that year.",
+                              "When you click on a marker on the map, the bottom bar will be populated with information about the school.",
+                              "May you have future success in finding a school for your child!",
+                            ]
+                            ),
                          html.Hr(className="divider"),
                          build_graph_title(html.B("Years")),
                          dcc.Dropdown(
